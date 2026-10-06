@@ -1,4 +1,7 @@
 #include "raylib.h"
+#include <string>
+using namespace std;
+#include "stdio.h"
 
 int main() {
     const int screenWidth = 800;
@@ -17,23 +20,39 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        // Draw the 8x8 board
-        for (int row = 0; row < 8; row++) {
-            for (int col = 0; col < 8; col++) {
-                // Alternate colors based on grid position
+        for (int row = 7; row >= 0; row--) {
+            for (int col = 0; col <= 7; col++) {
                 bool isLightSquare = (row + col) % 2 == 0;
+
                 Color squareColor = isLightSquare ? RAYWHITE : DARKGRAY;
                 
-                // Calculate pixel coordinates
                 int xPos = col * squareSize;
                 int yPos = row * squareSize;
 
                 DrawRectangle(xPos, yPos, squareSize, squareSize, squareColor);
+                
+                if (row == 7) {
+                    char file = 'a' + col;
+                    string text(1, file);
+
+                    int x = col * squareSize + 10;
+                    int y = row * squareSize + squareSize - 30;
+
+                    DrawText(text.c_str(), x, y, 20, BLACK);
+                }
+
+                if (col == 7){
+                    int rank = row + 1;
+                    string text = to_string(rank);
+
+                    int x = col * squareSize + 80;
+                    int y = row * squareSize + 10;
+
+                    DrawText(text.c_str(), x, y, 20, BLACK);
+                }
             }
         }
         
-        // (Draw pieces here later by looping through your board array)
-
         EndDrawing();
     }
 
