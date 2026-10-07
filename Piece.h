@@ -1,8 +1,9 @@
 #pragma once
+#include "raylib.h"
 #include <memory>
 #include <cmath>
 
-enum class Color { WHITE, BLACK, NONE };
+//enum class Color { WHITE, BLACK, NONE };
 
 class Piece {
 public:

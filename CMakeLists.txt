@@ -12,5 +12,10 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(raylib)
 
 # Build your game
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME}
+    main.cpp
+    Board.cpp
+    Square.cpp
+    BoardRenderer.cpp
+)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)
