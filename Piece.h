@@ -3,13 +3,13 @@
 #include <memory>
 #include <cmath>
 
-//enum class Color { WHITE, BLACK, NONE };
+enum class PieceColor { White, Black, None };
 
 class Piece {
 public:
-    Color color;
+    PieceColor color;
 
-    explicit Piece(Color c) : color(c) {}
+    explicit Piece(PieceColor c) : color(c) {}
 
      virtual ~Piece() = default;
 

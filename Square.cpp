@@ -14,3 +14,11 @@ int Square::getCol() const {
 bool Square::hasPiece() const {
     return piece != nullptr;
 }
+
+const Piece* Square::getPiece() const {
+    return piece.get();
+}
+
+void Square::setPiece(unique_ptr<Piece> piece) {
+    this->piece = move(piece);
+}

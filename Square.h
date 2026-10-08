@@ -14,4 +14,7 @@ class Square {
         int getCol() const;
 
         bool hasPiece() const;
+        const Piece* getPiece() const;
+
+        void setPiece(std::unique_ptr<Piece> piece);
 };

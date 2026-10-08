@@ -1,4 +1,3 @@
 #include "Pawn.h"
 
-Pawn::Pawn(Color c) : Piece(c) {}
-
+Pawn::Pawn(PieceColor c) : Piece(c) {}
