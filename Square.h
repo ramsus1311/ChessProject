@@ -17,4 +17,5 @@ class Square {
         const Piece* getPiece() const;
 
         void setPiece(std::unique_ptr<Piece> piece);
+        std::unique_ptr<Piece> removePiece();
 };

@@ -22,3 +22,7 @@ const Piece* Square::getPiece() const {
 void Square::setPiece(unique_ptr<Piece> piece) {
     this->piece = move(piece);
 }
+
+unique_ptr<Piece> Square::removePiece() {
+    return move(piece);
+}

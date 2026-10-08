@@ -17,11 +17,15 @@ int main() {
 
     Board board;
     BoardRenderer boardRenderer(board, squareSize);
-    Square square(0, 0);
-    printf("Square has piece: %s\n", square.hasPiece() ? "true" : "false");
-    square.setPiece(make_unique<Pawn>(PieceColor::Black));
-    printf("Square has piece: %s\n", square.hasPiece() ? "true" : "false");
-    printf("Square piece: %p\n", square.getPiece());
+
+    board.placePiece(6, 4, make_unique<Pawn>(PieceColor::White));
+
+    printf("Square (6, 4) has a piece: %s\n", board.getSquare(6, 4).hasPiece() ? "true" : "false");
+
+    board.movePiece(6, 4, 4, 4);
+
+    printf("Square (6, 4) has a piece: %s\n", board.getSquare(6, 4).hasPiece() ? "true" : "false");
+    printf("Square (4, 4) has a piece: %s\n", board.getSquare(4, 4).hasPiece() ? "true" : "false");
 
     // Main game loop
     while (!WindowShouldClose()) {
