@@ -7,6 +7,7 @@ class Board {
     private:
         std::array<std::array<std::unique_ptr<Square>, 8>, 8> squares;
         void constructBoard();
+        void setupInitialPieces();
     public:
         Board();
         const Square& getSquare(int row, int col) const;

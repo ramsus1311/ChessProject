@@ -33,6 +33,15 @@ void BoardRenderer::render() const {
 
                 DrawText(text.c_str(), x, y, 20, BLACK);
             }
+
+            if (square.hasPiece()) {
+                const char* pawnText = "P";
+
+                int textX = col * squareSize + squareSize / 2 - 10;
+                int textY = row * squareSize + squareSize / 2 - 20;
+
+                DrawText(pawnText, textX, textY, 40, BLACK);
+            }
         }
     }
     

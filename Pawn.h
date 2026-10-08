@@ -3,9 +3,7 @@
 
 class Pawn : public Piece {
 public:
-    explicit Pawn(PieceColor c) : Piece(c) {}
+    explicit Pawn(PieceColor c);
 
-    bool isValidMove(int startX, int startY, int endX, int endY) const override {
-        
-        }
-    };
+    bool isValidMove(int startCol, int startRow, int endCol, int endRow) const override;
+};

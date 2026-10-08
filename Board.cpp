@@ -1,8 +1,10 @@
 #include "Board.h"
+#include "Pawn.h"
 using namespace std;
 
 Board::Board() {
     constructBoard();
+    setupInitialPieces();
 }
 
 void Board::constructBoard() {
@@ -19,6 +21,18 @@ const Square& Board::getSquare(int row, int col) const {
 
 void Board::placePiece(int row, int col, unique_ptr<Piece> piece) {
     squares.at(row).at(col)->setPiece(move(piece));
+}
+
+void Board::setupInitialPieces() {
+    // Place white pawns
+    for (int col = 0; col < 8; col++) {
+        placePiece(6, col, make_unique<Pawn>(PieceColor::White));
+    }
+
+    // Place black pawns
+    for (int col = 0; col < 8; col++) {
+        placePiece(1, col, make_unique<Pawn>(PieceColor::Black));
+    }
 }
 
 void Board::movePiece(int startRow, int startCol, int endRow, int endCol) {

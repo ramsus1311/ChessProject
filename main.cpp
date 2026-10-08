@@ -1,5 +1,7 @@
 #include "raylib.h"
+#include <chrono>
 #include <string>
+#include <thread>
 using namespace std;
 #include "stdio.h"
 #include "Board.h"
@@ -17,15 +19,6 @@ int main() {
 
     Board board;
     BoardRenderer boardRenderer(board, squareSize);
-
-    board.placePiece(6, 4, make_unique<Pawn>(PieceColor::White));
-
-    printf("Square (6, 4) has a piece: %s\n", board.getSquare(6, 4).hasPiece() ? "true" : "false");
-
-    board.movePiece(6, 4, 4, 4);
-
-    printf("Square (6, 4) has a piece: %s\n", board.getSquare(6, 4).hasPiece() ? "true" : "false");
-    printf("Square (4, 4) has a piece: %s\n", board.getSquare(4, 4).hasPiece() ? "true" : "false");
 
     // Main game loop
     while (!WindowShouldClose()) {

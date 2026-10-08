@@ -15,6 +15,7 @@ FetchContent_MakeAvailable(raylib)
 add_executable(${PROJECT_NAME}
     main.cpp
     Board.cpp
+    Pawn.cpp
     Square.cpp
     BoardRenderer.cpp
 )
