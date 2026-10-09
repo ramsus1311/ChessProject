@@ -36,11 +36,15 @@ void Board::setupInitialPieces() {
 }
 
 void Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
-    unique_ptr<Piece> piece = squares.at(startRow).at(startCol)->removePiece();
-
+    const Piece* piece = squares.at(startRow).at(startCol)->getPiece();
     if(piece == nullptr) {
         return;
     }
 
-    squares.at(endRow).at(endCol)->setPiece(move(piece));
+    if(!piece->isValidMove(startCol, startRow, endCol, endRow)) {
+        return;
+    }
+
+    unique_ptr<Piece> movingPiece = squares.at(startRow).at(startCol)->removePiece();
+    squares.at(endRow).at(endCol)->setPiece(move(movingPiece));
 }

@@ -1,13 +1,8 @@
-#include "raylib.h"
-#include <chrono>
-#include <string>
-#include <thread>
 using namespace std;
-#include "stdio.h"
+#include "raylib.h"
 #include "Board.h"
 #include "BoardRenderer.h"
-#include "Square.h"
-#include "Pawn.h"
+#include "Game.h"
 
 int main() {
     const int screenWidth = 800;
@@ -19,9 +14,12 @@ int main() {
 
     Board board;
     BoardRenderer boardRenderer(board, squareSize);
+    Game game(board, squareSize);
 
-    // Main game loop
     while (!WindowShouldClose()) {
+
+        game.handleInput();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
