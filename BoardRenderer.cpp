@@ -53,6 +53,14 @@ void BoardRenderer::render(bool hasSelection, int selectedRow, int selectedCol) 
                 case PieceType::Bishop:
                     pieceText = "B";
                     break;
+                
+                case PieceType::Knight:
+                    pieceText = "N";
+                    break;
+
+                case PieceType::Rook:
+                    pieceText = "R";
+                    break;
 
                 default:
                     break;

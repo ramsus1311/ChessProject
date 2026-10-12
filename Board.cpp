@@ -1,6 +1,8 @@
 #include "Board.h"
 #include "Bishop.h"
 #include "Pawn.h"
+#include "Knight.h"
+#include "Rook.h"
 using namespace std;
 
 Board::Board() {
@@ -28,6 +30,10 @@ void Board::setupInitialPieces() {
     // Place white bishops
     placePiece(7, 2, make_unique<Bishop>(PieceColor::White));
     placePiece(7, 5, make_unique<Bishop>(PieceColor::White));
+    placePiece(7, 1, make_unique<Knight>(PieceColor::White));
+    placePiece(7, 6, make_unique<Knight>(PieceColor::White));
+    placePiece(7, 0, make_unique<Rook>(PieceColor::White));
+    placePiece(7, 7, make_unique<Rook>(PieceColor::White));
 
     // Place white pawns
     for (int col = 0; col < 8; col++) {
@@ -37,6 +43,10 @@ void Board::setupInitialPieces() {
     // Place black bishops
     placePiece(0, 2, make_unique<Bishop>(PieceColor::Black));
     placePiece(0, 5, make_unique<Bishop>(PieceColor::Black));
+    placePiece(0, 1, make_unique<Knight>(PieceColor::Black));
+    placePiece(0, 6, make_unique<Knight>(PieceColor::Black));
+    placePiece(0, 0, make_unique<Rook>(PieceColor::Black));
+    placePiece(0, 7, make_unique<Rook>(PieceColor::Black));
 
     // Place black pawns
     for (int col = 0; col < 8; col++) {
