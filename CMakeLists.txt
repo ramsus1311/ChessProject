@@ -19,5 +19,6 @@ add_executable(${PROJECT_NAME}
     Square.cpp
     BoardRenderer.cpp
     Game.cpp
+    Bishop.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

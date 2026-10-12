@@ -8,5 +8,5 @@ class BoardRenderer {
         int squareSize;
     public:
         BoardRenderer(const Board& board, int squareSize);
-        void render() const;
+        void render(bool hasSelection, int selectedRow, int selectedCol) const;
 };

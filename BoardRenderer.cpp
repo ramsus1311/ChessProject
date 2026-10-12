@@ -1,14 +1,18 @@
 #include "BoardRenderer.h"
+#include "Bishop.h"
+#include "Pawn.h"
 #include <string>
 
 using namespace std;
 
 BoardRenderer::BoardRenderer(const Board& board, int squareSize) : board(board), squareSize(squareSize) {}
 
-void BoardRenderer::render() const {
+void BoardRenderer::render(bool hasSelection, int selectedRow, int selectedCol) const {
     for (int row = 0; row < 8; row++) {
         for (int col = 0; col < 8; col++) {
             const Square& square = board.getSquare(row, col);
+
+            const Piece* piece = square.getPiece();
 
             bool isLightSquare = (row + col) % 2 == 0;
             Color squareColor = isLightSquare ? RAYWHITE : DARKGRAY;
@@ -34,13 +38,30 @@ void BoardRenderer::render() const {
                 DrawText(text.c_str(), x, y, 20, BLACK);
             }
 
-            if (square.hasPiece()) {
-                const char* pawnText = "P";
+            if (hasSelection && row == selectedRow && col == selectedCol) {
+                DrawRectangle(col * squareSize, row * squareSize, squareSize, squareSize, YELLOW);
+            }
+
+            if (piece != nullptr) {
+                const char* pieceText = "?";
+
+                switch (piece->getType()) {
+                case PieceType::Pawn:
+                    pieceText = "P";
+                    break;
+
+                case PieceType::Bishop:
+                    pieceText = "B";
+                    break;
+
+                default:
+                    break;
+                }
 
                 int textX = col * squareSize + squareSize / 2 - 10;
                 int textY = row * squareSize + squareSize / 2 - 20;
 
-                DrawText(pawnText, textX, textY, 40, BLACK);
+                DrawText(pieceText, textX, textY, 40, BLACK);
             }
         }
     }

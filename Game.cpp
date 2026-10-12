@@ -17,9 +17,27 @@ void Game::handleInput(){
                     hasSelection = true;
                 }
             } else {
-                board.movePiece(startRow, startCol, row, col);
-                hasSelection = false;
+                if (row == startRow && col == startCol) {
+                    hasSelection = false;
+                } else {
+                    bool pieceMoved = board.movePiece(startRow, startCol, row, col);
+                    if (pieceMoved) {
+                        hasSelection = false;
+                    }
+                }
             }
         }
     }
-};
+}
+
+bool Game::isSelected() const {
+    return hasSelection;
+}
+
+int Game::getSelectedRow() const {
+    return startRow;
+}
+
+int Game::getSelectedCol() const {
+    return startCol;
+}

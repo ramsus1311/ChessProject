@@ -23,7 +23,7 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-        boardRenderer.render();
+        boardRenderer.render(game.isSelected(), game.getSelectedRow(), game.getSelectedCol());
 
         EndDrawing();
     }

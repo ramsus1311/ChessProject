@@ -97,6 +97,14 @@ build CMakeFiles/ChessGame.dir/Game.cpp.obj: CXX_COMPILER__ChessGame_unscanned_D
   OBJECT_DIR = CMakeFiles\ChessGame.dir
   OBJECT_FILE_DIR = CMakeFiles\ChessGame.dir
 
+build CMakeFiles/ChessGame.dir/Bishop.cpp.obj: CXX_COMPILER__ChessGame_unscanned_Debug C$:/Users/rasmu/Desktop/ChessProject/Bishop.cpp || cmake_object_order_depends_target_ChessGame
+  DEFINES = -DGRAPHICS_API_OPENGL_33 -DPLATFORM_DESKTOP
+  DEP_FILE = CMakeFiles\ChessGame.dir\Bishop.cpp.obj.d
+  FLAGS = -g -std=gnu++17
+  INCLUDES = -IC:/Users/rasmu/Desktop/ChessProject/build/_deps/raylib-src/src -IC:/Users/rasmu/Desktop/ChessProject/build/_deps/raylib-src/src/external/glfw/include
+  OBJECT_DIR = CMakeFiles\ChessGame.dir
+  OBJECT_FILE_DIR = CMakeFiles\ChessGame.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ChessGame
@@ -105,7 +113,7 @@ build CMakeFiles/ChessGame.dir/Game.cpp.obj: CXX_COMPILER__ChessGame_unscanned_D
 #############################################
 # Link the executable ChessGame.exe
 
-build ChessGame.exe: CXX_EXECUTABLE_LINKER__ChessGame_Debug CMakeFiles/ChessGame.dir/main.cpp.obj CMakeFiles/ChessGame.dir/Board.cpp.obj CMakeFiles/ChessGame.dir/Pawn.cpp.obj CMakeFiles/ChessGame.dir/Square.cpp.obj CMakeFiles/ChessGame.dir/BoardRenderer.cpp.obj CMakeFiles/ChessGame.dir/Game.cpp.obj | _deps/raylib-build/raylib/libraylib.a _deps/raylib-build/raylib/external/glfw/src/libglfw3.a || _deps/raylib-build/raylib/external/glfw/src/libglfw3.a _deps/raylib-build/raylib/libraylib.a
+build ChessGame.exe: CXX_EXECUTABLE_LINKER__ChessGame_Debug CMakeFiles/ChessGame.dir/main.cpp.obj CMakeFiles/ChessGame.dir/Board.cpp.obj CMakeFiles/ChessGame.dir/Pawn.cpp.obj CMakeFiles/ChessGame.dir/Square.cpp.obj CMakeFiles/ChessGame.dir/BoardRenderer.cpp.obj CMakeFiles/ChessGame.dir/Game.cpp.obj CMakeFiles/ChessGame.dir/Bishop.cpp.obj | _deps/raylib-build/raylib/libraylib.a _deps/raylib-build/raylib/external/glfw/src/libglfw3.a || _deps/raylib-build/raylib/external/glfw/src/libglfw3.a _deps/raylib-build/raylib/libraylib.a
   FLAGS = -g
   LINK_LIBRARIES = _deps/raylib-build/raylib/libraylib.a  -lopengl32  -lglu32  -lwinmm  _deps/raylib-build/raylib/external/glfw/src/libglfw3.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ChessGame.dir

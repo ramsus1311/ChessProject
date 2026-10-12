@@ -12,4 +12,7 @@ private:
 public:
     Game(Board& board, int squareSize);
     void handleInput();
+    bool isSelected() const;
+    int getSelectedRow() const;
+    int getSelectedCol() const;
 };
