@@ -3,6 +3,8 @@
 #include "Pawn.h"
 #include "Knight.h"
 #include "Rook.h"
+#include "Queen.h"
+#include "King.h"
 using namespace std;
 
 Board::Board() {
@@ -34,6 +36,8 @@ void Board::setupInitialPieces() {
     placePiece(7, 6, make_unique<Knight>(PieceColor::White));
     placePiece(7, 0, make_unique<Rook>(PieceColor::White));
     placePiece(7, 7, make_unique<Rook>(PieceColor::White));
+    placePiece(7, 3, make_unique<Queen>(PieceColor::White));
+    placePiece(7, 4, make_unique<King>(PieceColor::White));
 
     // Place white pawns
     for (int col = 0; col < 8; col++) {
@@ -47,6 +51,8 @@ void Board::setupInitialPieces() {
     placePiece(0, 6, make_unique<Knight>(PieceColor::Black));
     placePiece(0, 0, make_unique<Rook>(PieceColor::Black));
     placePiece(0, 7, make_unique<Rook>(PieceColor::Black));
+    placePiece(0, 3, make_unique<Queen>(PieceColor::Black));
+    placePiece(0, 4, make_unique<King>(PieceColor::Black));
 
     // Place black pawns
     for (int col = 0; col < 8; col++) {

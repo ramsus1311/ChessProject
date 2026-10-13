@@ -61,6 +61,14 @@ void BoardRenderer::render(bool hasSelection, int selectedRow, int selectedCol) 
                 case PieceType::Rook:
                     pieceText = "R";
                     break;
+                
+                    case PieceType::Queen:
+                    pieceText = "Q";
+                    break;
+                    
+                case PieceType::King:
+                    pieceText = "K";
+                    break;
 
                 default:
                     break;

@@ -22,5 +22,7 @@ add_executable(${PROJECT_NAME}
     Bishop.cpp
     Knight.cpp
     Rook.cpp
+    Queen.cpp
+    King.cpp
 )
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib)

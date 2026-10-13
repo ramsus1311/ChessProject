@@ -12,4 +12,5 @@ bool Rook::isValidMove(int startCol, int startRow, int endCol, int endRow) const
     } else if (startRow == endRow && startCol != endCol) {
         return true;
     }
+    return false;
 }
