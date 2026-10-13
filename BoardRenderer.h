@@ -9,4 +9,6 @@ class BoardRenderer {
     public:
         BoardRenderer(const Board& board, int squareSize);
         void render(bool hasSelection, int selectedRow, int selectedCol) const;
+        void drawPawn(int row, int col, PieceColor color) const;
+        void drawBishop(int row, int col, PieceColor color) const;
 };
