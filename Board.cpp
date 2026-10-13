@@ -29,7 +29,7 @@ void Board::placePiece(int row, int col, unique_ptr<Piece> piece) {
 }
 
 void Board::setupInitialPieces() {
-    // Place white bishops
+    // Place white pieces
     placePiece(7, 2, make_unique<Bishop>(PieceColor::White));
     placePiece(7, 5, make_unique<Bishop>(PieceColor::White));
     placePiece(7, 1, make_unique<Knight>(PieceColor::White));
@@ -39,12 +39,11 @@ void Board::setupInitialPieces() {
     placePiece(7, 3, make_unique<Queen>(PieceColor::White));
     placePiece(7, 4, make_unique<King>(PieceColor::White));
 
-    // Place white pawns
-    for (int col = 0; col < 8; col++) {
+    for (int col = 0; col < 8; col++) { 
         placePiece(6, col, make_unique<Pawn>(PieceColor::White));
     }
 
-    // Place black bishops
+    // Place black pieces
     placePiece(0, 2, make_unique<Bishop>(PieceColor::Black));
     placePiece(0, 5, make_unique<Bishop>(PieceColor::Black));
     placePiece(0, 1, make_unique<Knight>(PieceColor::Black));
@@ -54,20 +53,47 @@ void Board::setupInitialPieces() {
     placePiece(0, 3, make_unique<Queen>(PieceColor::Black));
     placePiece(0, 4, make_unique<King>(PieceColor::Black));
 
-    // Place black pawns
     for (int col = 0; col < 8; col++) {
         placePiece(1, col, make_unique<Pawn>(PieceColor::Black));
     }
 }
 
+bool Board::isPathClear(int startRow, int startCol, int endRow, int endCol) const {
+    int rowStep = (endRow > startRow) - ( endRow < startRow);
+    int colStep = (endCol > startCol) - ( endCol < startCol);
+
+    int currentRow = startRow + rowStep;
+    int currentCol = startCol + colStep;
+
+    while (currentRow != endRow || currentCol != endCol) {
+        if (getSquare(currentRow, currentCol).hasPiece()) {
+            return false;
+        }
+        currentRow += rowStep;
+        currentCol += colStep;
+    }
+    return true;
+}
+
 bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
-    const Piece* piece = squares.at(startRow).at(startCol)->getPiece();
-    if(piece == nullptr) {
+    const Piece* sourcePiece = squares.at(startRow).at(startCol)->getPiece();
+    const Piece* targetPiece = squares.at(endRow).at(endCol)->getPiece();
+    if(sourcePiece == nullptr) {
         return false;
     }
 
-    if(!piece->isValidMove(startCol, startRow, endCol, endRow)) {
+    if(!sourcePiece->isValidMove(startCol, startRow, endCol, endRow)) {
         return false;
+    }
+
+    if(targetPiece != nullptr && targetPiece->color == sourcePiece->color) {
+        return false;
+    }
+
+    if(sourcePiece->getType() == PieceType::Bishop || sourcePiece->getType() == PieceType::Rook || sourcePiece->getType() == PieceType::Queen) {
+        if(!isPathClear(startRow, startCol, endRow, endCol)) {
+            return false;
+        }
     }
 
     unique_ptr<Piece> movingPiece = squares.at(startRow).at(startCol)->removePiece();

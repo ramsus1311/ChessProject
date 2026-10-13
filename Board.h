@@ -8,6 +8,7 @@ class Board {
         std::array<std::array<std::unique_ptr<Square>, 8>, 8> squares;
         void constructBoard();
         void setupInitialPieces();
+        bool isPathClear(int startRow, int startCol, int endRow, int endCol) const;
     public:
         Board();
         const Square& getSquare(int row, int col) const;
