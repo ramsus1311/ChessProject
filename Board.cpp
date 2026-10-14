@@ -76,14 +76,93 @@ bool Board::isPathClear(int startRow, int startCol, int endRow, int endCol) cons
 }
 
 bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
+    
     const Piece* sourcePiece = squares.at(startRow).at(startCol)->getPiece();
     const Piece* targetPiece = squares.at(endRow).at(endCol)->getPiece();
+
+    int rookCol = -1;
+    int rookDestinationCol = -1;
+    
     if(sourcePiece == nullptr) {
         return false;
     }
 
-    if(!sourcePiece->isValidMove(startCol, startRow, endCol, endRow)) {
+    bool isCastlingMove = sourcePiece->getType() == PieceType::King && startCol == 4 && startRow == endRow && abs(endCol - startCol) == 2;
+
+    if(!isCastlingMove && !sourcePiece->isValidMove(startCol, startRow, endCol, endRow)) {
         return false;
+    }
+
+    if (isCastlingMove) {
+        if (endCol == 6) {
+            rookCol = 7;
+            rookDestinationCol = 5;
+        } else if (endCol == 2) {
+            rookCol = 0;
+            rookDestinationCol = 3;
+        } else {
+            return false;
+        }
+
+        int direction = endCol > startCol ? 1 : -1;
+
+        for(int col = startCol + direction; col != rookCol; col += direction) {
+            if(squares.at(startRow).at(col)->hasPiece()) {
+                return false;
+            }
+        }
+
+        const Piece* rookPiece =
+            squares.at(startRow).at(rookCol)->getPiece();
+
+        if (sourcePiece->hasMoved ||
+            rookPiece == nullptr ||
+            rookPiece->getType() != PieceType::Rook ||
+            rookPiece->color != sourcePiece->color ||
+            rookPiece->hasMoved) {
+            return false;
+        }
+    }
+
+    if (isCastlingMove) {
+        unique_ptr<Piece> movingKing =
+            squares.at(startRow).at(startCol)->removePiece();
+
+        unique_ptr<Piece> movingRook =
+            squares.at(startRow).at(rookCol)->removePiece();
+
+        movingKing->markAsMoved();
+        movingRook->markAsMoved();
+
+        squares.at(endRow).at(endCol)->setPiece(move(movingKing));
+        squares.at(startRow).at(rookDestinationCol)
+            ->setPiece(move(movingRook));
+
+        return true;
+    }
+
+    if(sourcePiece->getType() == PieceType::Pawn) {
+        int rowDifference = endRow - startRow;
+        int colDifference = abs(endCol - startCol);
+
+        bool isDiagonalMove = colDifference == 1;
+
+        if(isDiagonalMove) {
+            if(targetPiece == nullptr || targetPiece->color == sourcePiece->color) {
+                return false;
+            }
+        } else {
+            if(targetPiece != nullptr) {
+                return false;
+            }
+            if(abs(rowDifference) == 2) {
+                int middleRow = (startRow + endRow) / 2;
+                
+                if(getSquare(middleRow, startCol).hasPiece()) {
+                    return false;
+                }
+            }
+        }
     }
 
     if(targetPiece != nullptr && targetPiece->color == sourcePiece->color) {
@@ -97,6 +176,10 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
     }
 
     unique_ptr<Piece> movingPiece = squares.at(startRow).at(startCol)->removePiece();
+
+    movingPiece->markAsMoved();
+    
     squares.at(endRow).at(endCol)->setPiece(move(movingPiece));
+    
     return true;
 }

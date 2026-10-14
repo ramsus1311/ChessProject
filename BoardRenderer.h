@@ -11,4 +11,8 @@ class BoardRenderer {
         void render(bool hasSelection, int selectedRow, int selectedCol) const;
         void drawPawn(int row, int col, PieceColor color) const;
         void drawBishop(int row, int col, PieceColor color) const;
+        void drawKnight(int row, int col, PieceColor color) const;
+        void drawRook(int row, int col, PieceColor color) const;
+        void drawQueen(int row, int col, PieceColor color) const;
+        void drawKing(int row, int col, PieceColor color) const;
 };

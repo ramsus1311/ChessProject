@@ -7,6 +7,9 @@ PieceType Pawn::getType() const {
 }
 
 bool Pawn::isValidMove(int startCol, int startRow, int endCol, int endRow) const {
+    int rowDifference = endRow - startRow;
+    int colDifference = abs(endCol - startCol);
+
     if(color == PieceColor::White) {
         if(startCol == endCol && startRow - 1 == endRow) {
             return true;
@@ -14,11 +17,17 @@ bool Pawn::isValidMove(int startCol, int startRow, int endCol, int endRow) const
         if(startCol == endCol && startRow == 6 && endRow == startRow - 2) {
             return true;
         }
+        if(colDifference == 1 && rowDifference == -1) {
+            return true;
+        }
     } else if(color == PieceColor::Black) {
         if(startCol == endCol && startRow + 1 == endRow) {
             return true;
         }
         if(startCol == endCol && startRow == 1 && endRow == startRow + 2) {
+            return true;
+        }
+        if(colDifference == 1 && rowDifference == 1) {
             return true;
         }
     }

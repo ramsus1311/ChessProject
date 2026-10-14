@@ -11,10 +11,15 @@ class Piece {
 public:
     PieceColor color;
     PieceType type;
+    bool hasMoved;
 
-    explicit Piece(PieceColor c) : color(c) {}
+    explicit Piece(PieceColor c) : color(c), hasMoved(false) {}
 
      virtual ~Piece() = default;
+
+     void markAsMoved() {
+         hasMoved = true;
+     }
 
      virtual bool isValidMove(int startX, int startY, int endX, int endY) const = 0;
 
