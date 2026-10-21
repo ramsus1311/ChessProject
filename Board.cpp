@@ -7,7 +7,7 @@
 #include "King.h"
 using namespace std;
 
-Board::Board() {
+Board::Board() : lastMoveWasPawnDoubleStep(false), lastMoveEndCol(-1), lastMoveEndRow(-1) {
     constructBoard();
     setupInitialPieces();
 }
@@ -79,7 +79,8 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
     
     const Piece* sourcePiece = squares.at(startRow).at(startCol)->getPiece();
     const Piece* targetPiece = squares.at(endRow).at(endCol)->getPiece();
-
+    
+    bool isEnPassant = false; 
     int rookCol = -1;
     int rookDestinationCol = -1;
     
@@ -137,6 +138,10 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
         squares.at(endRow).at(endCol)->setPiece(move(movingKing));
         squares.at(startRow).at(rookDestinationCol)
             ->setPiece(move(movingRook));
+        
+        lastMoveWasPawnDoubleStep = false;
+        lastMoveEndRow = -1;
+        lastMoveEndCol = -1;
 
         return true;
     }
@@ -148,16 +153,31 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
         bool isDiagonalMove = colDifference == 1;
 
         if(isDiagonalMove) {
-            if(targetPiece == nullptr || targetPiece->color == sourcePiece->color) {
+            if(targetPiece == nullptr) {
+                const Piece* adjacentPiece =
+                    squares.at(startRow).at(endCol)->getPiece();
+
+                if(lastMoveWasPawnDoubleStep &&
+                    lastMoveEndRow == startRow &&
+                    lastMoveEndCol == endCol &&
+                    adjacentPiece != nullptr &&
+                    adjacentPiece->getType() == PieceType::Pawn &&
+                    adjacentPiece->color != sourcePiece->color) {
+                    isEnPassant = true;
+                } else {
+                    return false;
+                }
+            } else if(targetPiece->color == sourcePiece->color) {
                 return false;
             }
         } else {
             if(targetPiece != nullptr) {
                 return false;
             }
+
             if(abs(rowDifference) == 2) {
                 int middleRow = (startRow + endRow) / 2;
-                
+
                 if(getSquare(middleRow, startCol).hasPiece()) {
                     return false;
                 }
@@ -175,11 +195,30 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
         }
     }
 
+    if(isEnPassant) {
+        squares.at(startRow).at(endCol)->removePiece();
+    }
+
+    bool currentMoveWasPawnDoubleStep =
+        sourcePiece->getType() == PieceType::Pawn &&
+        abs(endRow - startRow) == 2;
+
+
     unique_ptr<Piece> movingPiece = squares.at(startRow).at(startCol)->removePiece();
 
     movingPiece->markAsMoved();
     
     squares.at(endRow).at(endCol)->setPiece(move(movingPiece));
+
+    lastMoveWasPawnDoubleStep = currentMoveWasPawnDoubleStep;
+
+    if (lastMoveWasPawnDoubleStep) {
+        lastMoveEndRow = endRow;
+        lastMoveEndCol = endCol;
+    } else {
+        lastMoveEndRow = -1;
+        lastMoveEndCol = -1;
+    }
     
     return true;
 }

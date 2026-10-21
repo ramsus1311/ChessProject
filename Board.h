@@ -6,6 +6,9 @@
 class Board {
     private:
         std::array<std::array<std::unique_ptr<Square>, 8>, 8> squares;
+        bool lastMoveWasPawnDoubleStep;
+        int lastMoveEndCol;
+        int lastMoveEndRow;
         void constructBoard();
         void setupInitialPieces();
         bool isPathClear(int startRow, int startCol, int endRow, int endCol) const;
