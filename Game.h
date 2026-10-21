@@ -9,6 +9,8 @@ private:
     int startCol;
     Board& board;
     int squareSize;
+    PieceColor currentTurn;
+    void switchTurn();
 public:
     Game(Board& board, int squareSize);
     void handleInput();

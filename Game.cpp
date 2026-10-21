@@ -1,6 +1,6 @@
 #include "Game.h"
 
-Game::Game(Board& board, int squareSize) : board(board), squareSize(squareSize), hasSelection(false), startRow(0), startCol(0) {}
+Game::Game(Board& board, int squareSize) : board(board), squareSize(squareSize), hasSelection(false), startRow(0), startCol(0), currentTurn(PieceColor::White) {}
 
 void Game::handleInput(){
     if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
@@ -11,7 +11,7 @@ void Game::handleInput(){
 
         if (row >= 0 && row < 8 && col >= 0 && col < 8) {
             if (!hasSelection) {
-                if (board.getSquare(row, col).hasPiece()) {
+                if (board.getSquare(row, col).hasPiece() && board.getSquare(row, col).getPiece()->color == currentTurn) {
                     startRow = row;
                     startCol = col;
                     hasSelection = true;
@@ -23,10 +23,19 @@ void Game::handleInput(){
                     bool pieceMoved = board.movePiece(startRow, startCol, row, col);
                     if (pieceMoved) {
                         hasSelection = false;
+                        switchTurn();
                     }
                 }
             }
         }
+    }
+}
+
+void Game::switchTurn() {
+    if (currentTurn == PieceColor::White) {
+        currentTurn = PieceColor::Black;
+    } else {
+        currentTurn = PieceColor::White;
     }
 }
 
