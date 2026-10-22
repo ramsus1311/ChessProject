@@ -11,6 +11,9 @@ class Board {
         int lastMoveEndRow;
         void constructBoard();
         void setupInitialPieces();
+        bool isSquareUnderAttack(int row, int col, PieceColor byColor) const;
+        bool findKing(PieceColor color, int& kingRow, int& kingCol) const;
+        bool isInCheck(PieceColor color) const;
         bool isPathClear(int startRow, int startCol, int endRow, int endCol) const;
     public:
         Board();

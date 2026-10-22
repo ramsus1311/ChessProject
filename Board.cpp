@@ -75,6 +75,62 @@ bool Board::isPathClear(int startRow, int startCol, int endRow, int endCol) cons
     return true;
 }
 
+bool Board::isSquareUnderAttack(int row, int col, PieceColor byColor) const{
+    for(int r = 0; r < 8; r++) {
+        for(int c = 0; c < 8; c++) {
+            const Piece* piece = squares.at(r).at(c)->getPiece();
+            if(piece != nullptr && piece->color == byColor) {
+                if(piece->getType() == PieceType::Pawn) {
+                    int direction = piece->color == PieceColor::White ? -1 : 1;
+                    if(row == r + direction && abs(col - c) == 1) {
+                        return true;
+                    }
+                    continue;
+                }
+                if(piece->getType() == PieceType::Bishop ||
+                   piece->getType() == PieceType::Rook ||
+                   piece->getType() == PieceType::Queen) {
+                    if(piece->isValidMove(c, r, col, row) && isPathClear(r, c, row, col)) {
+                        return true;
+                    }
+                    continue;
+                }
+                if(piece->isValidMove(c, r, col, row)) {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
+bool Board::findKing(PieceColor color, int& kingRow, int& kingCol) const {
+    for(int row = 0; row < 8; row++) {
+        for(int col = 0; col < 8; col++) {
+            const Piece* piece = squares.at(row).at(col)->getPiece();
+            if(piece != nullptr && piece->getType() == PieceType::King && piece->color == color) {
+                kingRow = row;
+                kingCol = col;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool Board::isInCheck(PieceColor color) const {
+    int kingRow = -1;
+    int kingCol = -1;
+
+    if(!findKing(color, kingRow, kingCol)) {
+        return false;
+    }
+
+    PieceColor opponentColor = (color == PieceColor::White) ? PieceColor::Black : PieceColor::White;
+
+    return isSquareUnderAttack(kingRow, kingCol, opponentColor);
+}
+
 bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
     
     const Piece* sourcePiece = squares.at(startRow).at(startCol)->getPiece();
@@ -122,6 +178,19 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
             rookPiece->color != sourcePiece->color ||
             rookPiece->hasMoved) {
             return false;
+        }
+
+        PieceColor opponentColor =
+            sourcePiece->color == PieceColor::White
+                ? PieceColor::Black
+                : PieceColor::White;
+
+        for (int col = startCol;
+            col != endCol + direction;
+            col += direction) {
+            if (isSquareUnderAttack(startRow, col, opponentColor)) {
+                return false;
+            }
         }
     }
 
@@ -195,22 +264,38 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
         }
     }
 
-    if(isEnPassant) {
-        squares.at(startRow).at(endCol)->removePiece();
+    PieceColor movingColor = sourcePiece->color;
+    bool previousHasMoved = sourcePiece->hasMoved;
+
+    bool previousLastMoveWasPawnDoubleStep =
+        lastMoveWasPawnDoubleStep;
+    int previousLastMoveEndRow = lastMoveEndRow;
+    int previousLastMoveEndCol = lastMoveEndCol;
+
+    unique_ptr<Piece> capturedPiece =
+        squares.at(endRow).at(endCol)->removePiece();
+
+    unique_ptr<Piece> enPassantCapturedPiece = nullptr;
+
+    if (isEnPassant) {
+        enPassantCapturedPiece =
+            squares.at(startRow).at(endCol)->removePiece();
     }
 
     bool currentMoveWasPawnDoubleStep =
         sourcePiece->getType() == PieceType::Pawn &&
         abs(endRow - startRow) == 2;
 
-
-    unique_ptr<Piece> movingPiece = squares.at(startRow).at(startCol)->removePiece();
+    unique_ptr<Piece> movingPiece =
+        squares.at(startRow).at(startCol)->removePiece();
 
     movingPiece->markAsMoved();
-    
-    squares.at(endRow).at(endCol)->setPiece(move(movingPiece));
 
-    lastMoveWasPawnDoubleStep = currentMoveWasPawnDoubleStep;
+    squares.at(endRow).at(endCol)
+        ->setPiece(move(movingPiece));
+
+    lastMoveWasPawnDoubleStep =
+        currentMoveWasPawnDoubleStep;
 
     if (lastMoveWasPawnDoubleStep) {
         lastMoveEndRow = endRow;
@@ -219,6 +304,33 @@ bool Board::movePiece(int startRow, int startCol, int endRow, int endCol) {
         lastMoveEndRow = -1;
         lastMoveEndCol = -1;
     }
-    
+
+    if (isInCheck(movingColor)) {
+        unique_ptr<Piece> movedPiece =
+            squares.at(endRow).at(endCol)->removePiece();
+
+        movedPiece->hasMoved = previousHasMoved;
+
+        squares.at(startRow).at(startCol)
+            ->setPiece(move(movedPiece));
+
+        if (capturedPiece != nullptr) {
+            squares.at(endRow).at(endCol)
+                ->setPiece(move(capturedPiece));
+        }
+
+        if (enPassantCapturedPiece != nullptr) {
+            squares.at(startRow).at(endCol)
+                ->setPiece(move(enPassantCapturedPiece));
+        }
+
+        lastMoveWasPawnDoubleStep =
+            previousLastMoveWasPawnDoubleStep;
+        lastMoveEndRow = previousLastMoveEndRow;
+        lastMoveEndCol = previousLastMoveEndCol;
+
+        return false;
+    }
+
     return true;
 }
